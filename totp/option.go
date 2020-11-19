@@ -33,4 +33,3 @@ func Hash(h func() hash.Hash) Option {
 		totp.Hash = h
 	}
 }
-

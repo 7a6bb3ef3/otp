@@ -10,7 +10,7 @@ func Digit(n uint) Option {
 	}
 }
 
-func Hash(hs func()hash.Hash) Option {
+func Hash(hs func() hash.Hash) Option {
 	return func(h *HOTP) {
 		h.Hash = hs
 	}

@@ -7,7 +7,7 @@ import (
 var cas map[int64]string
 var key string
 
-func init(){
+func init() {
 	key = "12345678901234567890"
 	cas = make(map[int64]string)
 	cas[1111111109] = "07081804"
@@ -17,12 +17,12 @@ func init(){
 
 func TestNew(t *testing.T) {
 	sec := []byte(key)
-	for k ,v := range cas {
-		if r := New(sec , Digit(8) , T(k));r != v {
-			t.Log(k ,v ,r)
+	for k, v := range cas {
+		if r := New(sec, Digit(8), T(k)); r != v {
+			t.Log(k, v, r)
 			t.Fail()
-		}else{
-			t.Log("Pass:" ,k ,v ,r)
+		} else {
+			t.Log("Pass:", k, v, r)
 		}
 	}
 }
