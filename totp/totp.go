@@ -2,7 +2,7 @@ package totp
 
 import (
 	"crypto/sha1"
-	"github.com/nynicg/rrm/otp/hotp"
+	"github.com/nynicg/otp/hotp"
 	"hash"
 	"time"
 )
