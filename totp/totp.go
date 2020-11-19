@@ -24,6 +24,11 @@ type TOTP struct {
 	Hash		func() hash.Hash
 }
 
+func (ttp *TOTP) Sum(k []byte) string{
+	c := (ttp.T - ttp.T0) / int64(ttp.X)
+	return hotp.New(k ,uint64(c) , hotp.Hash(ttp.Hash) , hotp.Digit(ttp.Digit))
+}
+
 func New(key []byte ,opts ...Option) string{
 	ttp := &TOTP{
 		T0: 0,
@@ -35,6 +40,5 @@ func New(key []byte ,opts ...Option) string{
 	for _ ,f := range opts{
 		f(ttp)
 	}
-	c := (ttp.T - ttp.T0) / int64(ttp.X)
-	return hotp.New(key ,uint64(c) , hotp.Hash(ttp.Hash) , hotp.Digit(ttp.Digit))
+	return ttp.Sum(key)
 }

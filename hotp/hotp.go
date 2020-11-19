@@ -23,20 +23,11 @@ type HOTP struct {
 	Hash	func() hash.Hash
 }
 
-func New(key []byte ,c uint64 ,opts ...Option) string{
-	h := &HOTP{
-		K:     key,
-		C:     c,
-		Digit: 6,
-		Hash:  sha1.New,
-	}
-	for _ ,f := range opts{
-		f(h)
-	}
+func (h *HOTP) Sum(k []byte) string{
 	// RFC4226 Section 5.3 Step 1
 	bf := make([]byte ,8)
 	binary.BigEndian.PutUint64(bf ,h.C)
-	hm := hmac.New(h.Hash ,key)
+	hm := hmac.New(h.Hash ,k)
 	hm.Write(bf)
 	hs := hm.Sum(nil)
 
@@ -55,6 +46,19 @@ func New(key []byte ,c uint64 ,opts ...Option) string{
 	u := binary.BigEndian.Uint64(bf)
 	format := "%0" + strconv.Itoa(int(h.Digit)) + "d"
 	return fmt.Sprintf(format ,u % pow10(h.Digit))
+}
+
+func New(key []byte ,c uint64 ,opts ...Option) string{
+	h := &HOTP{
+		K:     key,
+		C:     c,
+		Digit: 6,
+		Hash:  sha1.New,
+	}
+	for _ ,f := range opts{
+		f(h)
+	}
+	return h.Sum(key)
 }
 
 func pow10(n uint) uint64{
